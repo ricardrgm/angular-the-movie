@@ -6,6 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MyhomeComponent } from './myhome/myhome.component';
 import { MymovieComponent } from './mymovie/mymovie.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './shared/material/material/material.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { MymovieComponent } from './mymovie/mymovie.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

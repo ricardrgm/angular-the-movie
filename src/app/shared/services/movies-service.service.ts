@@ -2,20 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from 'src/environments/environment';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
+
+import { map } from 'rxjs/operators';
 
 
-export interface IMovies{
 
-  id:Number, // Identificador único para distinguir las películas.
-  title:String, //título.
-  poster:String //URL de un póster.
-  synopsis:String //Descripción breve.
-  genres:String[], // Géneros de la película: "Adventure", "Action", "Romantic Comedy" etc.
-  year:Number, //Año de estreno.
+export interface IMovies {
+
+  id: Number, // Identificador único para distinguir las películas.
+  title: String, //título.
+  poster: String //URL de un póster.
+  synopsis: String //Descripción breve.
+  genres: String[], // Géneros de la película: "Adventure", "Action", "Romantic Comedy" etc.
+  year: Number, //Año de estreno.
   director: String, //Director.
-  actors:String[] // Nombre de los actores principales.
-  hours:string [] // Horario de proyección. ejemplo: Wednesday 19:30, 22:30 Indica que se puede ver la película los miércoles a las 19:30h y a las 22:30h.
+  actors: String[] // Nombre de los actores principales.
+  hours: String[] // Horario de proyección. ejemplo: Wednesday 19:30, 22:30 Indica que se puede ver la película los miércoles a las 19:30h y a las 22:30h.
   room: Number //Número de la sala valor entre 1 y 5.
 }
 
@@ -25,33 +27,28 @@ export interface IMovies{
 export class MoviesServiceService {
 
   // obMovies!:Observable<IMovies[]>;
-  movies!:IMovies[];
+  movies!: IMovies[];
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  private fetchMovies(): Observable<any>{
-    // return this.http.get<IMovies[]>(environment.url_movies);
-    let a = this.http.get(environment.url_movies)
-    console.log(a);
-    return a;
-    // return this.http.get(environment.url_movies);
+  getMovies(): Observable<IMovies[]> {
+    return this.http.get<IMovies[]>(environment.url_movies);
   }
 
-  getMovies():IMovies[]{
-    // let obMovies!:Observable<IMovies[]>;
-    //this.fetchMovies().subscribe(data => this.movies = data);
-    this.http.get(environment.url_movies).subscribe(data => console.log(data));
-    return this.movies;
-   }
+  getMovie(id: Number): Observable<IMovies | undefined> {
+    let obMovies!: Observable<IMovies[]>;
+    let movie!: Observable<IMovies | undefined>;
 
-  getMovie(id:Number):IMovies{
-    let obMovies!:Observable<IMovies[]>;
-    let movie:IMovies;
+    obMovies = this.http.get<IMovies[]>(environment.url_movies);
+    movie = obMovies.pipe(map((x:any) => {return x.movies.find((element: any) => element.id == id)}));
 
-    obMovies=this.fetchMovies();
-    obMovies.subscribe(data => this.movies = data);
+    // obMovies.subscribe((data: any) => {console.log(data);});
+    // movie.subscribe((data: any) => {console.log(data);});
 
-    movie=this.movies.find(element => element.id=id) as IMovies;
+    // obMovies.subscribe((data: any) => {
+    //     const movie_s = data.movies.find((element: any) => element.id == id) as IMovies
+    //     console.log(movie_s);
+    // });
     return movie;
   }
 }

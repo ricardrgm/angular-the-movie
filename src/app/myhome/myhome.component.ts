@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { IMovies, MoviesServiceService } from '../shared/services/movies-service.service';
 
 
@@ -13,7 +12,7 @@ export class MyhomeComponent implements OnInit {
   constructor(private moviesService: MoviesServiceService) { }
 
   ngOnInit(): void {
-    this.movies=this.moviesService.getMovies();
+   this.moviesService.getMovies().subscribe(data=> this.movies=data);
   }
 
 }
